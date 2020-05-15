@@ -20,7 +20,7 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 * Run: `docker run -d -p 3000:3000 -p 3001:3001 promasu/cryptpad`
 * Run with customizations: `docker run -d -p 3000:3000 -p 3001:3001 -v customize:/cryptpad/customize promasu/cryptpad`
 * Run with configuration: `docker run -d -p 3000:3000 -p 3001:3001 -v config.js:/cryptpad/config/config.js promasu/cryptpad`
-* Run with persistent data: `docker run -d -p 3000:3000 -p 3001:3001 -v data/blob:/cryptpad/blob -v data/block:/cryptpad/block -v customize:/cryptpad/customize -v data/data:/cryptpad/data -v data/files:/cryptpad/datastore promasu/cryptpad`
+* Run with persistent data: `docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/data/blob:/cryptpad/blob -v ${PWD}/data/block:/cryptpad/block -v ${PWD}/customize:/cryptpad/customize -v ${PWD}/data/data:/cryptpad/data -v ${PWD}/data/files:/cryptpad/datastore promasu/cryptpad`
 
 ### Docker-compose
 
