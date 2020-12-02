@@ -1,10 +1,18 @@
 ---
-version: '2'
+version: '3.8'
 
 services:
   cryptpad:
     image: "promasu/cryptpad:latest"
     hostname: cryptpad
+
+    environment:
+      - CPAD_MAIN_DOMAIN=example.com
+      - CPAD_SANDBOX_DOMAIN=sandbox.example.com
+
+    configs:
+      - source: ./config.js
+        target: /cryptpad/config/config.js
 
     volumes:
       - ./data/blob:/cryptpad/blob

@@ -1,4 +1,4 @@
-# CryptPad docker
+# CryptPad docker  
 
 This repository has been created as part of an ongoing effort to separate docker from [the CryptPad platform repo](https://github.com/xwiki-labs/cryptpad).
 
@@ -12,17 +12,66 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 ## Usage
 
 ### General notices
-* Mounted files and folders have to be owned by userid 4001. It is possible you have to run 
-`sudo chown -R 4001:4001 filename`
+* With minimum settings, Nginx will listen for HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection. To disable HTTP2 and allow easier local testing, set the environment variable `CPAD_HTTP2_DISABLE` to `true`.  
 
-### Dockerfile
+* If you'd prefer Nginx to terminate TLS connections, provide a fullchain certificate and a key and set `CPAD_TLS_CERT` and `CPAD_TLS_KEY`. Both variables MUST be set for the entrypoint script to set paths in config. If `dhparam.pem` file isn't provided, it will be generated.  
 
-* Run: `docker run -d -p 3000:3000 -p 3001:3001 promasu/cryptpad`
-* Run with customizations: `docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/customize:/cryptpad/customize promasu/cryptpad`
-* Run with configuration: `docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/config.js:/cryptpad/config/config.js promasu/cryptpad`
-* Run with persistent data: `docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/data/blob:/cryptpad/blob -v ${PWD}/data/block:/cryptpad/block -v ${PWD}/customize:/cryptpad/customize -v ${PWD}/data/data:/cryptpad/data -v ${PWD}/data/files:/cryptpad/datastore promasu/cryptpad`
+* Mounted files and folders for Cryptpad have to be owned by userid 4001. It is possible you have to run `sudo chown -R 4001:4001 filename`  
 
-### Docker-compose
+### Environment variables  
 
-* Run: `docker-compose up`
-* Run with traefik2 labels: `docker-compose -f docker-compose.yml -f traefik2.yml up`
+| Variables | Description | Required | Default |
+| --- | --- | --- | --- |
+| `CPAD_MAIN_DOMAIN` | Cryptpad main domain FQDN | Yes | None |
+| `CPAD_SANDBOX_DOMAIN` | Cryptpad sandbox subdomain FQDN | Yes | None |
+| `CPAD_API_DOMAIN` | Cryptpad API subdomain FQDN| No | `$CPAD_MAIN_DOMAIN` |
+| `CPAD_FILES_DOMAIN` | Cryptpad files subdomain FQDN | No | `$CPAD_MAIN_DOMAIN` |
+| `CPAD_TRUSTED_PROXY` | Trusted proxy CIDR or hostname | No | None |
+| `CPAD_REALIP_HEADER`| Header to get client IP from (`X-Real-IP` or `X-Forwarded-For`) | No | `X-Real-IP` |
+| `CPAD_REALIP_RECURSIVE`| Instruct Nginx to perform a recursive search to find client's real IP (`on`/`off`) (see [ngx_http_realip_module](https://nginx.org/en/docs/http/ngx_http_realip_module.html)) | No | `off` |
+| `CPAD_TLS_CERT` | Path to TLS certificate file | No | None |
+| `CPAD_TLS_KEY` | Path to TLS private key file | No | None |
+| `CPAD_TLS_DHPARAM` | Path to Diffie-Hellman parameters file | No | `/etc/nginx/dhparam.pem` |
+| `CPAD_HTTP2_DISABLE` | Disable HTTP2, mostly meant for test purpose | No | `false` |
+### Docker
+
+##### Run with minimal settings:  
+`docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" -p 80:80 promasu/cryptpad`  
+
+##### Run with configuration:
+```
+docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
+-v ${PWD}/dhparam.pem:/path/to/dhparam.pem -p 80:80 promasu/cryptpad
+```
+
+##### Run with TLS:  
+**Note**: *If `dhparam.pem` isn't provided it will be generated upon container start. Beware that this is a time consuming step*
+```
+docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
+-e "CPAD_TLS_CERT=/path/to/cert.pem" -e "CPAD_TLS_KEY=/path/to/key.pem" \
+-e "CPAD_TLS_DHPARAM=/path/to/dhparam.pem" -v ${PWD}/cert.pem:/path/to/cert.pem \
+-v ${PWD}/key.pem:/path/to/key.pem -v ${PWD}/dhparam.pem:/path/to/dhparam.pem \
+-p 443:443 promasu/cryptpad
+```  
+
+##### Run with customizations:  
+```
+docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
+-v ${PWD}/customize:/cryptpad/customize -p 80:80 promasu/cryptpad
+```
+
+##### Run with persistent data:  
+```
+docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
+-v ${PWD}/data/blob:/cryptpad/blob -v ${PWD}/data/block:/cryptpad/block \
+-v ${PWD}/customize:/cryptpad/customize -v ${PWD}/data/data:/cryptpad/data \
+-v ${PWD}/data/files:/cryptpad/datastore -p 80:80 promasu/cryptpad
+```
+
+#### Docker-compose
+
+##### Run:
+`docker-compose up`
+
+##### Run with traefik2 labels:
+`docker-compose -f docker-compose.yml -f traefik2.yml up`
