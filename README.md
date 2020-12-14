@@ -54,6 +54,13 @@ docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.
 -p 443:443 promasu/cryptpad
 ```  
 
+##### Run behind a reverse proxy  
+```
+docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
+-e "CPAD_TRUSTED_PROXY=10.0.0.0/8" -e "CPAD_REALIP_HEADER=X-Forwarded-For" \
+-e "CPAD_REALIP_RECURSIVE=on" -p 80:80 promasu/cryptpad
+```  
+
 ##### Run with customizations:  
 ```
 docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
