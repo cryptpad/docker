@@ -16,8 +16,6 @@ RUN npm install --production \
     && npm install -g bower \
     && bower install --allow-root
 
-
-
 # Create actual cryptpad image
 FROM node:12-alpine
 

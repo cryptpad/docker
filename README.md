@@ -12,9 +12,10 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 ## Usage
 
 ### General notices
-* With minimum settings, Nginx will listen for HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection. To disable HTTP2 and allow easier local testing, set the environment variable `CPAD_HTTP2_DISABLE` to `true`.  
+* With minimum settings, Nginx will listen for HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection. To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.   
 
-* If you'd prefer Nginx to terminate TLS connections, provide a fullchain certificate and a key and set `CPAD_TLS_CERT` and `CPAD_TLS_KEY`. Both variables MUST be set for the entrypoint script to set paths in config. If `dhparam.pem` file isn't provided, it will be generated.  
+
+* If you'd prefer Nginx to terminate TLS connections, provide a fullchain certificate and a key and set `CPAD_TLS_CERT` and `CPAD_TLS_KEY`. Both variables MUST be set for the entrypoint script to set paths in config. You can also provide Diffie-Hellman parameters with `CPAD_TLS_DHPARAM`. If no `dhparam.pem` file is provided, it will be generated upon container start. Beware that this is a time consuming step.  
 
 * Mounted files and folders for Cryptpad have to be owned by userid 4001. It is possible you have to run `sudo chown -R 4001:4001 filename`  
 
@@ -26,7 +27,7 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 | `CPAD_SANDBOX_DOMAIN` | Cryptpad sandbox subdomain FQDN | Yes | None |
 | `CPAD_API_DOMAIN` | Cryptpad API subdomain FQDN| No | `$CPAD_MAIN_DOMAIN` |
 | `CPAD_FILES_DOMAIN` | Cryptpad files subdomain FQDN | No | `$CPAD_MAIN_DOMAIN` |
-| `CPAD_TRUSTED_PROXY` | Trusted proxy CIDR or hostname | No | None |
+| `CPAD_TRUSTED_PROXY` | Trusted proxy address or CIDR | No | None |
 | `CPAD_REALIP_HEADER`| Header to get client IP from (`X-Real-IP` or `X-Forwarded-For`) | No | `X-Real-IP` |
 | `CPAD_REALIP_RECURSIVE`| Instruct Nginx to perform a recursive search to find client's real IP (`on`/`off`) (see [ngx_http_realip_module](https://nginx.org/en/docs/http/ngx_http_realip_module.html)) | No | `off` |
 | `CPAD_TLS_CERT` | Path to TLS certificate file | No | None |
@@ -45,7 +46,6 @@ docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.
 ```
 
 ##### Run with TLS:  
-**Note**: *If `dhparam.pem` isn't provided it will be generated upon container start. Beware that this is a time consuming step*
 ```
 docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
 -e "CPAD_TLS_CERT=/path/to/cert.pem" -e "CPAD_TLS_KEY=/path/to/key.pem" \
