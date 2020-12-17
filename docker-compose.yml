@@ -9,10 +9,9 @@ services:
     environment:
       - CPAD_MAIN_DOMAIN=example.com
       - CPAD_SANDBOX_DOMAIN=sandbox.example.com
-
-    configs:
-      - source: ./config.js
-        target: /cryptpad/config/config.js
+      # Traefik can't use HTTP2 to communicate with cryptpat_websocket
+      # A workaroung is disabling HTTP2 in Nginx
+      - CPAD_HTTP2_DISABLE=true
 
     volumes:
       - ./data/blob:/cryptpad/blob
