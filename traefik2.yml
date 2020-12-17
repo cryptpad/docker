@@ -3,27 +3,27 @@ version: '3.8'
 
 services:
   cryptpad:
-      labels:
-        ## Enable traefik
-        - traefik.enable=true
+    labels:
+      ## Enable traefik
+      - traefik.enable=true
 
-        ## Declare service
-        ## Change the port if you enabled TLS
-        - traefik.http.services.cpad.loadbalancer.server.port=80
+      ## Declare service
+      ## Change the port if you enabled TLS
+      - traefik.http.services.cpad.loadbalancer.server.port=80
 
-        # Configure middleware for http to https redirection
-        - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
-        - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-        - traefik.http.middlewares.https-redirect.redirectscheme.port=443
+      # Configure middleware for http to https redirection
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.middlewares.https-redirect.redirectscheme.port=443
 
-        # HTTP router rules
-        - traefik.http.routers.cpad-http.entrypoints=http
-        - traefik.http.routers.cpad-http.rule=Host(`example.com`, `sandbox.example.com`)
-        - traefik.http.routers.cpad-http.middlewares=https-redirect
+      # HTTP router rules
+      - traefik.http.routers.cpad-http.entrypoints=http
+      - traefik.http.routers.cpad-http.rule=Host(`example.com`, `sandbox.example.com`)
+      - traefik.http.routers.cpad-http.middlewares=https-redirect
 
-        # HTTPS router rules
-        - traefik.http.routers.cpad-https.entrypoints=https
-        - traefik.http.routers.cpad-https.rule=Host(`example.com`, `sandbox.example.com`)
-        - traefik.http.routers.cpad-https.tls=true
-        - traefik.http.routers.cpad-https.tls.certresolver=letsencrypt
-        - traefik.http.routers.cpad-https.service=cpad
+      # HTTPS router rules
+      - traefik.http.routers.cpad-https.entrypoints=https
+      - traefik.http.routers.cpad-https.rule=Host(`example.com`, `sandbox.example.com`)
+      - traefik.http.routers.cpad-https.tls=true
+      - traefik.http.routers.cpad-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.cpad-https.service=cpad
