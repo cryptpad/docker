@@ -6,4 +6,5 @@ cryptpad/.git
 customize
 data
 docker-compose.yml
-Dockerfile
+traefik2.yml
+Dockerfile*

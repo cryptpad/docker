@@ -9,24 +9,49 @@ Docker images and their supporting configuration files are provided as a communi
 ## Migration
 Please see the [migration guide](MIGRATION.md) for further information on switching to this repository.
 
-## Usage
+## General notices  
+* Mounted files and folders for CryptPad have to be owned by userid 4001. It is possible you have to run `sudo chown -R 4001:4001 filename`. If your container engine uses namespacing to shift uids and gids in the containers, you need correct the uid and gid or to run the command from within the container.  
 
-### General notices
-* With minimum settings, Nginx will listen for HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection. To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.   
+### Standalone CryptPad  
+Tags: `latest` and `alpine`  
+Files: `Dockerfile` and `Dockerfile-alpine`  
 
+This image provides CryptPad served by Node without certs or CSP. It is up to you to deploy it behind a reverse proxy as per CryptPad's devs recommendations (see [Opening CryptPad to the Internet] (https://github.com/xwiki-labs/cryptpad/wiki/Installation-guide#opening-cryptpad-to-the-internet)).  
+If you already have a reverse proxy with CSP properly configured, you can keep using this image.  
+
+#### Usage  
+
+##### Run:  
+`docker run -d -p 3000:3000 -p 3001:3001 promasu/cryptpad`  
+
+##### Run with customizations:  
+`docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/customize:/cryptpad/customize promasu/cryptpad`  
+
+##### Run with configuration:  
+`docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/config.js:/cryptpad/config/config.js promasu/cryptpad`  
+
+##### Run with persistent data:  
+`docker run -d -p 3000:3000 -p 3001:3001 -v ${PWD}/data/blob:/cryptpad/blob -v ${PWD}/data/block:/cryptpad/block -v ${PWD}/customize:/cryptpad/customize -v ${PWD}/data/data:/cryptpad/data -v ${PWD}/data/files:/cryptpad/datastore promasu/cryptpad`
+
+### CryptPad proxied by Nginx  
+Tags: `nginx` and `nginx-alpine`  
+Files: `Dockerfile-nginx` and `Dockerfile-nginx-alpine`  
+
+This image provides CryptPad proxied by Nginx. It offers more configuration options than the standalone version (but will not run if the bare minimum options aren't set).  
+
+* With minimum settings, Nginx will listen for unencrypted HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection (also if you use Traefik, please read `docker-compose.yml` comment above this option).  
+To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.  
 
 * If you'd prefer Nginx to terminate TLS connections, provide a fullchain certificate and a key and set `CPAD_TLS_CERT` and `CPAD_TLS_KEY`. Both variables MUST be set for the entrypoint script to set paths in config. You can also provide Diffie-Hellman parameters with `CPAD_TLS_DHPARAM`. If no `dhparam.pem` file is provided, it will be generated upon container start. Beware that this is a time consuming step.  
 
-* Mounted files and folders for Cryptpad have to be owned by userid 4001. It is possible you have to run `sudo chown -R 4001:4001 filename`  
-
-### Environment variables  
+#### Environment variables  
 
 | Variables | Description | Required | Default |
 | --- | --- | --- | --- |
-| `CPAD_MAIN_DOMAIN` | Cryptpad main domain FQDN | Yes | None |
-| `CPAD_SANDBOX_DOMAIN` | Cryptpad sandbox subdomain FQDN | Yes | None |
-| `CPAD_API_DOMAIN` | Cryptpad API subdomain FQDN| No | `$CPAD_MAIN_DOMAIN` |
-| `CPAD_FILES_DOMAIN` | Cryptpad files subdomain FQDN | No | `$CPAD_MAIN_DOMAIN` |
+| `CPAD_MAIN_DOMAIN` | CryptPad main domain FQDN | Yes | None |
+| `CPAD_SANDBOX_DOMAIN` | CryptPad sandbox subdomain FQDN | Yes | None |
+| `CPAD_API_DOMAIN` | CryptPad API subdomain FQDN| No | `$CPAD_MAIN_DOMAIN` |
+| `CPAD_FILES_DOMAIN` | CryptPad files subdomain FQDN | No | `$CPAD_MAIN_DOMAIN` |
 | `CPAD_TRUSTED_PROXY` | Trusted proxy address or CIDR | No | None |
 | `CPAD_REALIP_HEADER`| Header to get client IP from (`X-Real-IP` or `X-Forwarded-For`) | No | `X-Real-IP` |
 | `CPAD_REALIP_RECURSIVE`| Instruct Nginx to perform a recursive search to find client's real IP (`on`/`off`) (see [ngx_http_realip_module](https://nginx.org/en/docs/http/ngx_http_realip_module.html)) | No | `off` |
@@ -34,7 +59,8 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 | `CPAD_TLS_KEY` | Path to TLS private key file | No | None |
 | `CPAD_TLS_DHPARAM` | Path to Diffie-Hellman parameters file | No | `/etc/nginx/dhparam.pem` |
 | `CPAD_HTTP2_DISABLE` | Disable HTTP2, mostly meant for test purpose | No | `false` |
-### Docker
+
+#### Usage
 
 ##### Run with minimal settings:  
 `docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" -p 80:80 promasu/cryptpad`  
