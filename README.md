@@ -11,7 +11,7 @@ Please see the [migration guide](MIGRATION.md) for further information on switch
 
 ## General notices  
 * **Important**: New images tagged `nginx` and `nginx-alpine` have been added to this repository. The `docker-compose.yml` and `traefik2.yml` examples files have been modified to use the `nginx` image because the legacy versions didn't provide Content-Security-Policy headers which is a requirement to properly expose CryptPad to the internet.  
-It is recommended to use the `promasu/cryptpad:nginx` image (see [Standalone Cryptpad](#cryptpad-proxied-by-nginx)).  
+It is recommended to use the `promasu/cryptpad:nginx` image (see [CryptPad proxied by Nginx](#cryptpad-proxied-by-nginx)).  
 
 * Mounted files and folders for CryptPad have to be owned by userid 4001. It is possible you have to run `sudo chown -R 4001:4001 filename`. If your container engine uses namespacing to shift uids and gids in the containers, you need correct the uid and gid or to run the command from within the container.  
 
