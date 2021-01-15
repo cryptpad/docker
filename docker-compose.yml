@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   cryptpad:
-    image: "promasu/cryptpad:latest"
+    image: "promasu/cryptpad:nginx"
     hostname: cryptpad
 
     environment:
