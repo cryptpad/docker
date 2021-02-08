@@ -4,7 +4,6 @@
 .gitmodules
 cryptpad/.git
 customize
-data
 docker-compose.yml
 traefik2.yml
 Dockerfile*
