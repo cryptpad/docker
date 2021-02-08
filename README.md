@@ -125,4 +125,10 @@ docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.
 `docker-compose up`
 
 ##### Run with traefik2 labels:
-`docker-compose -f docker-compose.yml -f traefik2.yml up`
+`docker-compose -f docker-compose.yml -f traefik2.yml up`  
+
+## Know bugs  
+###### Use the Nginx version with Traefik
+If Traefik is used as reverse proxy (e.g. to handle SSL certs) the CryptPad WebSocket is unreachable if Nginx listens with HTTP2.  
+A workaround is to disable HTTP2 by setting the `CPAD_HTTP2_DISABLE` environment variable.  
+
