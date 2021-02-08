@@ -19,15 +19,15 @@ services:
       - ./customize:/cryptpad/customize
       - ./data/data:/cryptpad/data
       - ./data/files:/cryptpad/datastore
-      - ./data/config.js:/cryptpad/config/config.js
+      - ./config.js:/cryptpad/config/config.js
 
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "80:80"
+      - "443:443"
 
     expose:
-      - "3000"
-      - "3001"
+      - "80"
+      - "443"
 
     ulimits:
       nofile:
