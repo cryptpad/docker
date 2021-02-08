@@ -133,4 +133,4 @@ If Traefik is used as reverse proxy (e.g. to handle SSL certs) the CryptPad WebS
 A workaround is to disable HTTP2 by setting the `CPAD_HTTP2_DISABLE` environment variable.  
 
 ###### Nginx version not working with some browser configurations  
-See #14
+See [Issue#14](https://github.com/xwiki-labs/cryptpad-docker/issues/14)
