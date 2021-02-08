@@ -55,7 +55,7 @@ Files: `Dockerfile-nginx` and `Dockerfile-nginx-alpine`
 This image provides CryptPad proxied by Nginx. It offers more configuration options than the standalone version (but will not run if the bare minimum options aren't set) and lets Nginx handle the different HTTP headers like CSP.  
 The `docker-entrypoint.sh` script copies Nginx configuration from the example provided in CryptPad repository (see file [`example.nginx.conf`](https://github.com/xwiki-labs/cryptpad/blob/main/docs/example.nginx.conf)) and substitutes the deployment environment variables.
 
-* With minimum settings, Nginx will listen for unencrypted HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection (also if you use Traefik, please read `docker-compose.yml` comment above this option).  
+* With minimum settings, Nginx will listen for unencrypted HTTP2 requests on port 80. Most browsers won't be able to connect without a reverse proxy to upgrade the connection (also if you use Traefik, see [this](#Use-the-Nginx-version-with-Traefik)).  
 To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.  
 
 * If you'd prefer Nginx to terminate TLS connections, provide a fullchain certificate and a key and set `CPAD_TLS_CERT` and `CPAD_TLS_KEY`. Both variables MUST be set for the entrypoint script to set paths in config. You can also provide Diffie-Hellman parameters with `CPAD_TLS_DHPARAM`. If no `dhparam.pem` file is provided, it will be generated upon container start. Beware that this is a time consuming step.  
@@ -74,7 +74,7 @@ To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.
 | `CPAD_TLS_CERT` | Path to TLS certificate file | No | None |
 | `CPAD_TLS_KEY` | Path to TLS private key file | No | None |
 | `CPAD_TLS_DHPARAM` | Path to Diffie-Hellman parameters file | No | `/etc/nginx/dhparam.pem` |
-| `CPAD_HTTP2_DISABLE` | Disable HTTP2 (See [Use the Nginx version with Traefik](#Use-the-Nginx-version-with-Traefik)) | No | `false` |
+| `CPAD_HTTP2_DISABLE` | Disable HTTP2 | No | `false` |
 
 #### Usage
 
