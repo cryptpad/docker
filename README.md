@@ -86,7 +86,7 @@ docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.
 ##### Run with configuration:
 ```
 docker run -d -e "CPAD_MAIN_DOMAIN=example.com" -e "CPAD_SANDBOX_DOMAIN=sandbox.example.com" \
--v ${PWD}/dhparam.pem:/path/to/dhparam.pem -p 80:80 promasu/cryptpad:nginx
+-v ${PWD}/config.js:/cryptpad/config/config.js -p 80:80 promasu/cryptpad:nginx
 ```
 
 ##### Run with TLS:  
