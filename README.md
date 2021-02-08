@@ -74,7 +74,7 @@ To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.
 | `CPAD_TLS_CERT` | Path to TLS certificate file | No | None |
 | `CPAD_TLS_KEY` | Path to TLS private key file | No | None |
 | `CPAD_TLS_DHPARAM` | Path to Diffie-Hellman parameters file | No | `/etc/nginx/dhparam.pem` |
-| `CPAD_HTTP2_DISABLE` | Disable HTTP2 (Currently needed with traefik) | No | `false` |
+| `CPAD_HTTP2_DISABLE` | Disable HTTP2 (See [Use the Nginx version with Traefik](#Use-the-Nginx-version-with-Traefik)) | No | `false` |
 
 #### Usage
 
