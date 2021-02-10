@@ -19,7 +19,7 @@ services:
       - ./customize:/cryptpad/customize
       - ./data/data:/cryptpad/data
       - ./data/files:/cryptpad/datastore
-      - ./config.js:/cryptpad/config/config.js
+      - ./data/config.js:/cryptpad/config/config.js
 
     ports:
       - "80:80"
