@@ -34,6 +34,9 @@ RUN set -x \
 # Copy nginx conf from official image
 COPY --from=nginx:latest /etc/nginx /etc/nginx
 
+# Disable server tokens
+RUN sed -i "/default_type/a \\    server_tokens off;" /etc/nginx/nginx.conf
+
 # Copy cryptpad with installed modules
 COPY --from=build --chown=cryptpad /cryptpad /cryptpad
 
