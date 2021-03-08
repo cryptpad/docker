@@ -33,7 +33,7 @@ RUN set -x \
 # Copy nginx conf from official image
 COPY --from=nginx:latest /etc/nginx /etc/nginx
 
-# Change nginx and disable server tokens
+# Change nginx user and disable server tokens
 RUN sed -i -e 's@\(^user\).*[^;]@\1 www-data@' \
     -e "/default_type/a \\    server_tokens off;" /etc/nginx/nginx.conf
 
