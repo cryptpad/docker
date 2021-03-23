@@ -132,6 +132,19 @@ if [ ! -f "${CPAD_NGINX_CPAD_CONF:=/etc/nginx/conf.d/cryptpad.conf}" ]; then
     sed -i  -e "s@\(^.*\) \+http2\(.*$\)@\1\2@" $CPAD_NGINX_CPAD_CONF
   fi
 
+  if [ "${CPAD_HIDE_PROXY_HEADERS:-false}" = "true" ]; then
+    sed -i '/\/api\/config {/ a \
+        proxy_hide_header Access-Control-Allow-Origin;\
+        proxy_hide_header Cache-Control;\
+        proxy_hide_header Content-Security-Policy;\
+        proxy_hide_header Cross-Origin-Embedder-Policy;\
+        proxy_hide_header Cross-Origin-Opener-Policy;\
+        proxy_hide_header Cross-Origin-Resource-Policy;\
+        proxy_hide_header X-Content-Type-Options;\
+        proxy_hide_header X-XSS-Protection;\
+        ' $CPAD_NGINX_CPAD_CONF
+  fi
+
   ## WIP
   # If cryptad conf isn't provided
   # if [ ! -f "$CPAD_CONF" ]; then

@@ -75,6 +75,7 @@ To disable HTTP2 set the environment variable `CPAD_HTTP2_DISABLE` to `true`.
 | `CPAD_TLS_KEY` | Path to TLS private key file | No | None |
 | `CPAD_TLS_DHPARAM` | Path to Diffie-Hellman parameters file | No | `/etc/nginx/dhparam.pem` |
 | `CPAD_HTTP2_DISABLE` | Disable HTTP2 | No | `false` |
+| `CPAD_HIDE_PROXY_HEADERS` | Hide HTTP headers before proxying to FPM (This is a temporary workaround to avoid header duplicaiton until issue is fixed upstream in CryptPad) | No | `false` |
 
 #### Usage
 
@@ -134,3 +135,5 @@ A workaround is to disable HTTP2 by setting the `CPAD_HTTP2_DISABLE` environment
 
 ##### Nginx version not working with some browser configurations  
 See [https://github.com/xwiki-labs/cryptpad/issues/633]  
+A workaround has been added to the `docker-entrypoint.sh` script.  
+Enable it by setting `CPAD_HIDE_PROXY_HEADERS` to `true`.
