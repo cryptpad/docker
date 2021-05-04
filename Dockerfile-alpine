@@ -47,4 +47,4 @@ VOLUME /cryptpad/datastore
 EXPOSE 3000 3001
 
 # Run cryptpad on startup
-CMD ["server.js"]
+CMD ["npm", "start"]
