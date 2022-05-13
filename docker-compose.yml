@@ -9,8 +9,8 @@ services:
     environment:
       - CPAD_MAIN_DOMAIN=example.com
       - CPAD_SANDBOX_DOMAIN=sandbox.example.com
-      # Traefik can't use HTTP2 to communicate with cryptpat_websocket
-      # A workaroung is disabling HTTP2 in Nginx
+      # Traefik can't use HTTP2 to communicate with cryptpad_websocket
+      # A workaround is to disable HTTP2 in Nginx
       - CPAD_HTTP2_DISABLE=true
 
     volumes:
