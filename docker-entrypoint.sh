@@ -108,7 +108,7 @@ if [ ! -f "${CPAD_NGINX_CPAD_CONF:=/etc/nginx/conf.d/cryptpad.conf}" ]; then
     sed -i  -e "s@\(^.*\) \+443 ssl\(.*$\)@\1 80\2@" \
             -e "s@[^#]ssl_@ #ssl_@g" \
             -e "s@include letsencrypt-webroot;@ #include letsencrypt-webroot;@g" \
-            -e "s@listen .*443 ssl;@ #listen [::]:443 ssl@g" $CPAD_NGINX_CPAD_CONF
+            -e "s@listen .*443 ssl@ #listen [::]:443 ssl@g" $CPAD_NGINX_CPAD_CONF
   fi
 
   # Should Nginx use http_realip_module
